@@ -1,40 +1,30 @@
 #ifndef SOUNDEX_H
 #define SOUNDEX_H
 
-#include "Soundex.h"
-#include <ctype.h>
-#include <string.h>
+#include <string>
+#include <cctype>
 
 char getSoundexCode(char c) {
-    c = toupper(c);
-    switch (c) {
-        case 'B': case 'F': case 'P': case 'V': return '1';
-        case 'C': case 'G': case 'J': case 'K': case 'Q': case 'S': case 'X': case 'Z': return '2';
-        case 'D': case 'T': return '3';
-        case 'L': return '4';
-        case 'M': case 'N': return '5';
-        case 'R': return '6';
-        default: return '0'; // For A, E, I, O, U, H, W, Y
-    }
+    static const std::string codes = "01230120022455012623010202";
+    return std::isalpha(c) ? codes[std::toupper(c) - 'A'] : '0';
 }
 
-void generateSoundex(const char *name, char *soundex) {
-    int len = strlen(name);
-    soundex[0] = toupper(name[0]);
-    int sIndex = 1;
-
-    for (int i = 1; i < len && sIndex < 4; i++) {
+std::string generateSoundex(const std::string &name) {
+    std::string soundex(1, std::toupper(name[0]));
+    
+    for (std::size_t i = 1; i < name.length() && soundex.length() < 4; ++i) {
         char code = getSoundexCode(name[i]);
-        if (code != '0' && code != soundex[sIndex - 1]) {
-            soundex[sIndex++] = code;
+        if (code != '0' && code != soundex.back()) {
+            soundex += code;
         }
     }
 
-    while (sIndex < 4) {
-        soundex[sIndex++] = '0';
+    while (soundex.length() < 4) {
+        soundex += '0';
     }
 
-    soundex[4] = '\0';
+    return soundex;
 }
 
 #endif // SOUNDEX_H
+
