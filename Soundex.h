@@ -4,7 +4,8 @@
 #include <string>
 #include <cctype>
 
-char getSoundexCode(char c) {
+char getSoundexCode(char c) 
+{
     static const std::string codes = "01230120022455012623010202";
     return std::isalpha(c) ? codes[std::toupper(c) - 'A'] : '0';
 }
