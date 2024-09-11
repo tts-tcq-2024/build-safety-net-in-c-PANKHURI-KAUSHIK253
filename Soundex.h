@@ -7,8 +7,7 @@
 
 // Helper function to get the Soundex code for a character
 char getSoundexCode(char c) {
-    c = toupper(c);
-    switch (c) {
+    switch (toupper(c)) {
         case 'B': case 'F': case 'P': case 'V': return '1';
         case 'C': case 'G': case 'J': case 'K': case 'Q': case 'S': case 'X': case 'Z': return '2';
         case 'D': case 'T': return '3';
@@ -19,31 +18,29 @@ char getSoundexCode(char c) {
     }
 }
 
-// Function to generate Soundex code using map
+// Simplified function to generate the Soundex code
 void generateSoundex(const char *name, char *soundex) {
-    int len = strlen(name);
-    
-    // Set the first letter of the soundex as the uppercase version of the first character
+    // First letter is always uppercase in Soundex
     soundex[0] = toupper(name[0]);
 
-    // Use map to apply getSoundexCode to all characters in name and store them in a temporary array
-    char tempSoundex[len];
-    tempSoundex[0] = soundex[0];
-    std::transform(name + 1, name + len, tempSoundex + 1, getSoundexCode);
-    
-    // Remove duplicates and '0' from tempSoundex while populating soundex
-    int sIndex = 1;
-    for (int i = 1; i < len && sIndex < 4; i++) {
-        if (tempSoundex[i] != '0' && tempSoundex[i] != tempSoundex[i - 1]) {
-            soundex[sIndex++] = tempSoundex[i];
+    int sIndex = 1; // Tracks the current position in the Soundex code
+
+    // Loop through the rest of the characters in the name
+    for (int i = 1; name[i] != '\0' && sIndex < 4; ++i) {
+        char code = getSoundexCode(name[i]);
+
+        // Add the code if it's not '0' and it's not the same as the previous code
+        if (code != '0' && code != soundex[sIndex - 1]) {
+            soundex[sIndex++] = code;
         }
     }
-    
-    // Pad with '0' if necessary
+
+    // Pad the Soundex code with '0' if necessary to make it 4 characters long
     while (sIndex < 4) {
         soundex[sIndex++] = '0';
     }
 
+    // Null-terminate the string
     soundex[4] = '\0';
 }
 
