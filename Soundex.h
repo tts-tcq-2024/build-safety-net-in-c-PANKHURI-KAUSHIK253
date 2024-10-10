@@ -5,43 +5,61 @@
 #include <ctype.h>
 #include <string.h>
 
-// Helper function to get the Soundex code for a character
+// Get the code from Table
+char getSoundexCodeFromTable(char c, const char *soundexTable)
+{
+    c = toupper(c);
+    if (c >= 'A' && c <= 'Z') {
+        return soundexTable[c - 'A'];
+    }
+    return '0'; // For any character outside A-Z
+}
+
 char getSoundexCode(char c) {
-    switch (toupper(c)) {
-        case 'B': case 'F': case 'P': case 'V': return '1';
-        case 'C': case 'G': case 'J': case 'K': case 'Q': case 'S': case 'X': case 'Z': return '2';
-        case 'D': case 'T': return '3';
-        case 'L': return '4';
-        case 'M': case 'N': return '5';
-        case 'R': return '6';
-        default: return '0'; // For A, E, I, O, U, H, W, Y
+    // Update the table with A to Z characters by numbers 
+    static const char soundexTable[26] = {
+        '0', '1', '2', '3', '0', '1', '2', '0', // A-H
+        '0', '2', '2', '4', '5', '5', '0', '1', // I-P
+        '2', '6', '2', '3', '0', '1', '0', '2', // Q-X
+        '0', '2'                                // Y-Z
+    };
+    
+    return getSoundexCodeFromTable(c, soundexTable);
+    
+}
+
+void validateCode(char code, char *soundex, int *sIndex)
+{
+    if (code != '0' && code != soundex[*sIndex - 1]) {
+            soundex[(*sIndex)++] = code;
     }
 }
 
-// Simplified function to generate the Soundex code
-void generateSoundex(const char *name, char *soundex) {
-    // First letter is always uppercase in Soundex
-    soundex[0] = toupper(name[0]);
-
-    int sIndex = 1; // Tracks the current position in the Soundex code
-
-    // Loop through the rest of the characters in the name
-    for (int i = 1; name[i] != '\0' && sIndex < 4; ++i) {
+void processSoundex(const char *name, char *soundex, int *sIndex)
+{
+    int len = strlen(name);
+    for (int i = 1; i < len && *sIndex < 4; i++) {
         char code = getSoundexCode(name[i]);
-
-        // Add the code if it's not '0' and it's not the same as the previous code
-        if (code != '0' && code != soundex[sIndex - 1]) {
-            soundex[sIndex++] = code;
-        }
+        validateCode(code, soundex, sIndex);
     }
+}
 
-    // Pad the Soundex code with '0' if necessary to make it 4 characters long
+void padsWithZero(char *soundex, int sIndex)
+{
     while (sIndex < 4) {
         soundex[sIndex++] = '0';
     }
 
-    // Null-terminate the string
     soundex[4] = '\0';
+}
+
+void generateSoundex(const char *name, char *soundex) {
+    soundex[0] = toupper(name[0]);
+    int sIndex = 1;
+
+    processSoundex(name, soundex, &sIndex);
+    
+    padsWithZero(soundex, sIndex);
 }
 
 #endif // SOUNDEX_H
