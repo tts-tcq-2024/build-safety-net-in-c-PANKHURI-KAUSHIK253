@@ -1,0 +1,74 @@
+est Case Scenarios for Soundex
+
+
+Case 1: Single letter input
+•	Given: A single letter. Ex: A, B, a, b etc.
+•	When: The Soundex algorithm is applied to the letter
+•	Then: The result should contain the letter as it is but in the upper case and pad the last 3 places with 0’s
+•	Examples:
+Input					Output
+ A					 A000
+ B					 B000
+ a					 A000
+ b					 B000
+
+
+Case 2: Repeated double letter input
+•	Given: A two letter repeating input. Ex: AA, BB, HH, aa etc.
+•	When: The Soundex algorithm is applied to the letter
+•	Then: The result should maintain the upper case of the first letter and should replace the letter with its corresponding value or drop the letter if it is a,e,I,o,u,h,w and pad with 0’s
+•	Examples:
+Input					Output
+ 	 A					 A000
+ 	 B					 B100
+ 	 c					 C200
+ 	 HH					 H000
+
+
+Case 3: Dropped letters as input
+•	Given: a word containing just dropped letters. Ex: AEIOU, HW, hwaeiou, aa etc.
+•	When: The Soundex algorithm is applied to the letter
+•	Then: The result should maintain the upper case of the first letter and drop the letter if it is a,e,I,o,u,h,w and pad with 0’s
+•	Examples:
+Input					Output
+ 	 AEIOU					 A000
+ 	 HW					 H000
+ 	 whaeiou				 W000
+
+
+Case 4: Single word as input
+•	Given: A single word as input. Ex: Robert, Bobby, Pfister, Ashcraft etc.
+•	When: The Soundex algorithm is applied to the letter
+•	Then: The result should maintain the upper case of the first letter and should replace the other letters with its corresponding value or drop the letter if it is a,e,I,o,u,h,w and pad with 0’s if the last 3 places are not filled
+•	Examples:
+Input					Output
+ 	Robert					 R163
+ 	Bobby					 B100
+ 	Pfister					 P123
+ 	Ashcraft				 A261
+
+
+Case 5: Numerical values as input
+•	Given: numerical values as input. Ex: 0, 123, 4507 etc.
+•	When: The Soundex algorithm is applied to the letter
+•	Then: The result should maintain the first value as it and pad with 0’s for the last 3 places
+•	Examples:
+Input					Output
+ 	 0					 0000
+ 	 123					 1000
+ 	 4507					 4000
+Case 6: words with special characters
+•	Given: words with special characters as input. Ex: Ruturaj-Gaikwad, J’Bumrah, Virat Kohli, Harish@15 etc.
+•	When: The Soundex algorithm is applied to the letter
+•	Then: The result should maintain the upper case of the first letter and should replace the letter with its corresponding value or drop the letter if it is a,e,I,o,u,h,w as well as the special characters also and pad with 0’s if the last 3 places were not filled.
+•	Examples:
+Input					Output
+ 	Ruturaj-Gaikwad			 R362
+ 	 J’Bumrah				 J156
+ 	 Virat kohli				 V632
+ 	 harish@15				 H620
+
+Case 7: empty  input
+•	Given: no input. 
+•	When: The Soundex algorithm is applied to the letter
+•	Then: The result should be empty
